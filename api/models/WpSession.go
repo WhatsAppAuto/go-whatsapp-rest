@@ -45,12 +45,6 @@ func (ws *WpSession) SaveWpSession(db *gorm.DB) (*WpSession, error) {
 	if err != nil {
 		return &WpSession{}, err
 	}
-	if ws.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", ws.UserID).Take(&ws.User).Error
-		if err != nil {
-			return &WpSession{}, err
-		}
-	}
 	return ws, nil
 }
 
@@ -61,14 +55,6 @@ func (ws *WpSession) FindAllWpSessions(db *gorm.DB) (*[]WpSession, error) {
 	if err != nil {
 		return &[]WpSession{}, err
 	}
-	if len(sessions) > 0 {
-		for i, _ := range sessions {
-			err := db.Debug().Model(&User{}).Where("id = ?", sessions[i].UserID).Take(&sessions[i].User).Error
-			if err != nil {
-				return &[]WpSession{}, err
-			}
-		}
-	}
 	return &sessions, nil
 }
 
@@ -77,12 +63,6 @@ func (ws *WpSession) FindWpSessionByID(db *gorm.DB, sid uint64) (*WpSession, err
 	err = db.Debug().Model(&WpSession{}).Where("id = ?", sid).Take(&ws).Error
 	if err != nil {
 		return &WpSession{}, err
-	}
-	if ws.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", ws.UserID).Take(&ws.User).Error
-		if err != nil {
-			return &WpSession{}, err
-		}
 	}
 	return ws, nil
 }
@@ -108,23 +88,18 @@ func (ws *WpSession) UpdateAWpSession(db *gorm.DB) (*WpSession, error) {
 			EncKey:      ws.EncKey,
 			MacKey:      ws.MacKey,
 			Wid:         ws.Wid,
+			Token:       ws.Token,
 			UpdatedAt:   time.Now(),
 		}).Error
 	if err != nil {
 		return &WpSession{}, err
 	}
-	if ws.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", ws.UserID).Take(&ws.User).Error
-		if err != nil {
-			return &WpSession{}, err
-		}
-	}
 	return ws, nil
 }
 
-func (ws *WpSession) DeleteAWpSession(db *gorm.DB, sid uint64, uid uint32) (int64, error) {
+func (ws *WpSession) DeleteAWpSession(db *gorm.DB, sid uint64, token string) (int64, error) {
 
-	db = db.Debug().Model(&WpSession{}).Where("id = ? and user_id = ?", sid, uid).Take(&WpSession{}).Delete(&WpSession{})
+	db = db.Debug().Model(&WpSession{}).Where("id = ? and token = ?", sid, token).Take(&WpSession{}).Delete(&WpSession{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
