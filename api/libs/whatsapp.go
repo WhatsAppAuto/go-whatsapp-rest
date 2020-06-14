@@ -129,7 +129,7 @@ func WASessionLoad(jid string, DB *gorm.DB) (whatsapp.Session, error) {
 	if err != nil {
 		return whatsapp.Session{}, err
 	}
-	err = DB.Debug().Model(models.WpSession{}).Where("user_id = ?", token.UserId).Take(&sessionModel).Error
+	err = DB.Debug().Model(models.WpSession{}).Where("token = ?", jid).Take(&sessionModel).Error
 	if err != nil {
 		return whatsapp.Session{}, err
 	}
