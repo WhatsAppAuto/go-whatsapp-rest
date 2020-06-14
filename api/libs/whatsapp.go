@@ -149,6 +149,7 @@ func WASessionSave(jid string, session whatsapp.Session, DB *gorm.DB) error {
 	sessionModel.Prepare()
 	err := DB.Debug().Model(models.WpSession{}).Where("token = ?", jid).Take(&sessionModel).Error
 	if err != nil {
+		sessionModel.SaveWpSession(DB)
 		return err
 	}
 	sessionModel.ServerToken = session.ServerToken
