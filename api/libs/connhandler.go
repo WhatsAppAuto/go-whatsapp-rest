@@ -46,7 +46,9 @@ func (myHandler) HandleError(err error) {
 	fmt.Fprintf(os.Stderr, "%v", err)
 }
 func (myHandler) HandleLiveLocationMessage(message whatsapp.LiveLocationMessage) {
-	if message.Info.RemoteJid == "558599628852-1585619935@g.us" {
+	if message.Info.FromMe {
+		return ;
+	}else{
 		data, err := json.Marshal(message)
 		if err != nil {
 			fmt.Println(err)
@@ -63,7 +65,9 @@ func (myHandler) HandleLiveLocationMessage(message whatsapp.LiveLocationMessage)
 }
 
 func (myHandler) HandleLocationMessage(message whatsapp.LocationMessage) {
-	if message.Info.RemoteJid == "558599628852-1585619935@g.us" {
+	if message.Info.FromMe {
+		return ;
+	}else{
 		response := wpLocationResponse{
 			Info: wpResponse{
 				Id:          message.Info.Id,
@@ -100,8 +104,7 @@ func (myHandler) HandleLocationMessage(message whatsapp.LocationMessage) {
 func (myHandler) HandleStickerMessage(message whatsapp.StickerMessage) {
 	if message.Info.FromMe == true {
 		return
-	}
-	if message.Info.RemoteJid == "558599628852-1585619935@g.us" {
+	}else{
 		data, err := json.Marshal(message)
 		if err != nil {
 			fmt.Println(err)
@@ -118,7 +121,9 @@ func (myHandler) HandleStickerMessage(message whatsapp.StickerMessage) {
 }
 
 func (myHandler) HandleTextMessage(message whatsapp.TextMessage) {
-	if message.Info.RemoteJid == "558599628852-1585619935@g.us" {
+	if message.Info.FromMe == true {
+		return ;
+	}else{
 		response := wpTextResponse{
 			Info: wpResponse{
 				Id:          message.Info.Id,
@@ -144,7 +149,9 @@ func (myHandler) HandleTextMessage(message whatsapp.TextMessage) {
 }
 
 func (myHandler) HandleImageMessage(message whatsapp.ImageMessage) {
-	if message.Info.RemoteJid == "558599628852-1585619935@g.us" {
+	if message.Info.FromMe == true {
+		return ;
+	}else{
 		response := wpDataResponse{
 			Info: wpResponse{
 				Id:          message.Info.Id,
@@ -197,7 +204,9 @@ func (myHandler) HandleDocumentMessage(message whatsapp.DocumentMessage) {
 }
 
 func (myHandler) HandleVideoMessage(message whatsapp.VideoMessage) {
-	if message.Info.RemoteJid == "558599628852-1585619935@g.us" {
+	if message.Info.FromMe == true {
+		return ;
+	}else{
 		response := wpDataResponse{
 			Info: wpResponse{
 				Id:          message.Info.Id,
@@ -247,7 +256,9 @@ func (myHandler) HandleVideoMessage(message whatsapp.VideoMessage) {
 }
 
 func (myHandler) HandleAudioMessage(message whatsapp.AudioMessage) {
-	if message.Info.RemoteJid == "558599628852-1585619935@g.us" {
+	if message.Info.FromMe == true {
+		return ;
+	}else{
 		data, err := message.Download()
 		if err != nil {
 			fmt.Println(err)
