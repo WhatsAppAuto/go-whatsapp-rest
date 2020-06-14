@@ -1,8 +1,6 @@
 package seed
 
 import (
-	"log"
-
 	"github.com/exatasmente/go-whatsapp-rest/api/models"
 	"github.com/jinzhu/gorm"
 )
@@ -19,7 +17,7 @@ var users = []models.User{
 }
 
 func Load(db *gorm.DB) {
-
+	return
 	// err := db.Debug().DropTableIfExists(&models.User{}).Error
 	// if err != nil {
 	// 	log.Fatalf("cannot drop table: %v", err)
@@ -45,11 +43,11 @@ func Load(db *gorm.DB) {
 	// 	log.Fatalf("cannot migrate table: %v", err)
 	// }
 
-	for i, _ := range users {
-		err := db.Debug().Model(&models.User{}).Create(&users[i]).Error
-		if err != nil {
-			log.Fatalf("cannot seed users table: %v", err)
-		}
+	// for i, _ := range users {
+	// 	err := db.Debug().Model(&models.User{}).Create(&users[i]).Error
+	// 	if err != nil {
+	// 		log.Fatalf("cannot seed users table: %v", err)
+	// 	}
 
-	}
+	// }
 }
