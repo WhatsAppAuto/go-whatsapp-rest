@@ -10,7 +10,7 @@ import (
 
 type WpSession struct {
 	ID          uint64 `gorm:"primary_key;auto_increment" json:"id"`
-	User        User   `json:"user"`
+	Token       string `gorm:unique;not null`
 	UserID      uint32 `gorm:"not null" json:"user_id"`
 	ClientId    string
 	ClientToken string
@@ -24,7 +24,7 @@ type WpSession struct {
 
 func (ws *WpSession) Prepare() {
 	ws.ID = 0
-	ws.User = User{}
+	ws.Token = ""
 	ws.ClientId = ""
 	ws.ClientToken = ""
 	ws.ServerToken = ""
