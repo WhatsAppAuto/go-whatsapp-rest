@@ -20,30 +20,30 @@ var users = []models.User{
 
 func Load(db *gorm.DB) {
 
-	err := db.Debug().DropTableIfExists(&models.User{}).Error
-	if err != nil {
-		log.Fatalf("cannot drop table: %v", err)
-	}
-	err = db.Debug().AutoMigrate(&models.User{}).Error
-	if err != nil {
-		log.Fatalf("cannot migrate table: %v", err)
-	}
-	err = db.Debug().DropTableIfExists(&models.WpSession{}).Error
-	if err != nil {
-		log.Fatalf("cannot drop table: %v", err)
-	}
-	err = db.Debug().AutoMigrate(&models.WpSession{}).Error
-	if err != nil {
-		log.Fatalf("cannot migrate table: %v", err)
-	}
-	err = db.Debug().DropTableIfExists(&models.UserToken{}).Error
-	if err != nil {
-		log.Fatalf("cannot drop table: %v", err)
-	}
-	err = db.Debug().AutoMigrate(&models.UserToken{}).Error
-	if err != nil {
-		log.Fatalf("cannot migrate table: %v", err)
-	}
+	// err := db.Debug().DropTableIfExists(&models.User{}).Error
+	// if err != nil {
+	// 	log.Fatalf("cannot drop table: %v", err)
+	// }
+	// err = db.Debug().AutoMigrate(&models.User{}).Error
+	// if err != nil {
+	// 	log.Fatalf("cannot migrate table: %v", err)
+	// }
+	// err = db.Debug().DropTableIfExists(&models.WpSession{}).Error
+	// if err != nil {
+	// 	log.Fatalf("cannot drop table: %v", err)
+	// }
+	// err = db.Debug().AutoMigrate(&models.WpSession{}).Error
+	// if err != nil {
+	// 	log.Fatalf("cannot migrate table: %v", err)
+	// }
+	// err = db.Debug().DropTableIfExists(&models.UserToken{}).Error
+	// if err != nil {
+	// 	log.Fatalf("cannot drop table: %v", err)
+	// }
+	// err = db.Debug().AutoMigrate(&models.UserToken{}).Error
+	// if err != nil {
+	// 	log.Fatalf("cannot migrate table: %v", err)
+	// }
 
 	for i, _ := range users {
 		err = db.Debug().Model(&models.User{}).Create(&users[i]).Error
