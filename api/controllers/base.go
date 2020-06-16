@@ -8,9 +8,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 
-	_ "github.com/jinzhu/gorm/dialects/postgres" //postgress database driver
-
 	"github.com/Progete-Dev/go-whatsapp-rest/api/models"
+	_ "github.com/jinzhu/gorm/dialects/mysql"    //postgress database driver
+	_ "github.com/jinzhu/gorm/dialects/postgres" //postgress database driver
 )
 
 type Server struct {
