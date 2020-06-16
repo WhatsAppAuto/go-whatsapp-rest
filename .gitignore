@@ -1,3 +1,4 @@
 /.vscode
 /share/store
 /share/upload
+.env
