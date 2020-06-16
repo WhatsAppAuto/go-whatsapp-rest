@@ -3,7 +3,7 @@ package seed
 import (
 	"log"
 
-	"github.com/exatasmente/go-whatsapp-rest/api/models"
+	"github.com/Progete-Dev/go-whatsapp-rest/api/models"
 	"github.com/jinzhu/gorm"
 )
 

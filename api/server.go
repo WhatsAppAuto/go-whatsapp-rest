@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/exatasmente/go-whatsapp-rest/api/controllers"
-	"github.com/exatasmente/go-whatsapp-rest/api/seed"
+	"github.com/Progete-Dev/go-whatsapp-rest/api/controllers"
+	"github.com/Progete-Dev/go-whatsapp-rest/api/seed"
 	"github.com/joho/godotenv"
 )
 
@@ -27,5 +27,6 @@ func Run() {
 	seed.Load(server.DB)
 
 	server.Run(":" + os.Getenv("PORT"))
+	//server.Run(":3000")
 
 }

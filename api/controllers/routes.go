@@ -1,6 +1,6 @@
 package controllers
 
-import "github.com/exatasmente/go-whatsapp-rest/middlewares"
+import "middlewares"
 
 func (s *Server) initializeRoutes() {
 	// Home Route

@@ -12,12 +12,12 @@ import (
 	"strings"
 
 	//"github.com/gorilla/mux"
-	"github.com/exatasmente/go-whatsapp-rest/api/auth"
-	// "github.com/exatasmente/go-whatsapp-rest/api/models"
-	// "github.com/exatasmente/go-whatsapp-rest/api/utils/formaterror"
-	config "github.com/exatasmente/go-whatsapp-rest/api/helpers"
-	libs "github.com/exatasmente/go-whatsapp-rest/api/libs"
-	responses "github.com/exatasmente/go-whatsapp-rest/api/responses"
+	"github.com/Progete-Dev/go-whatsapp-rest/api/auth"
+	// "github.com/Progete-Dev/go-whatsapp-rest/api/models"
+	// "github.com/Progete-Dev/go-whatsapp-rest/api/utils/formaterror"
+	config "github.com/Progete-Dev/go-whatsapp-rest/api/helpers"
+	libs "github.com/Progete-Dev/go-whatsapp-rest/api/libs"
+	responses "github.com/Progete-Dev/go-whatsapp-rest/api/responses"
 )
 
 type reqWhatsAppLogin struct {

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/exatasmente/go-whatsapp-rest/api/auth"
-	"github.com/exatasmente/go-whatsapp-rest/api/models"
-	responses "github.com/exatasmente/go-whatsapp-rest/api/responses"
+	"github.com/Progete-Dev/go-whatsapp-rest/api/auth"
+	"github.com/Progete-Dev/go-whatsapp-rest/api/models"
+	responses "github.com/Progete-Dev/go-whatsapp-rest/api/responses"
 	"github.com/jinzhu/gorm"
 )
 

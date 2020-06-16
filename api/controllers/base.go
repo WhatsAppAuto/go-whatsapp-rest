@@ -10,7 +10,7 @@ import (
 
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgress database driver
 
-	"github.com/exatasmente/go-whatsapp-rest/api/models"
+	"github.com/Progete-Dev/go-whatsapp-rest/api/models"
 )
 
 type Server struct {
