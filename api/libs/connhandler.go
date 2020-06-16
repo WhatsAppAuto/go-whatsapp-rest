@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/Rhymen/go-whatsapp"
 )
@@ -46,9 +45,7 @@ type myHandler struct {
 }
 
 func (myHandler) HandleError(err error) {
-	if strings.Contains(err.Error(), "error processing data: received invalid data") || strings.Contains(err.Error(), "invalid string with tag 174") {
-		return
-	}
+
 	fmt.Fprintf(os.Stderr, "%v", err)
 }
 func (h *myHandler) HandleLiveLocationMessage(message whatsapp.LiveLocationMessage) {
