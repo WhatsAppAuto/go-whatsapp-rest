@@ -99,10 +99,18 @@ func WAGenerateQR(timeout int, chanqr chan string, qrstr chan<- string) {
 	}
 }
 
-func WASessionInit(jid string, versionClientMajor int, versionClientMinor int, versionClientBuild int, timeout int) error {
+func WASessionInit(jid string, versionClientMajor int, versionClientMinor int, versionClientBuild int, timeout int, DB *gorm.DB) error {
 	if wac[jid] == nil {
 		conn, err := whatsapp.NewConn(time.Duration(timeout) * time.Second)
-		conn.AddHandler(myHandler{})
+		if err != nil {
+			return err
+		}
+		token := models.UserToken{}
+		err = DB.Debug().Model(models.UserToken{}).Where("token = ?", jid).Take(&token).Error
+		if err != nil {
+			return err
+		}
+		conn.AddHandler(myHandler{WebhookUrl: token.WebhookUrl})
 		if err != nil {
 			return err
 		}
@@ -229,7 +237,7 @@ func WASessionLogin(jid string, versionClientMajor int, versionClientMinor int, 
 		delete(wac, jid)
 	}
 
-	err := WASessionInit(jid, versionClientMajor, versionClientMinor, versionClientBuild, timeout)
+	err := WASessionInit(jid, versionClientMajor, versionClientMinor, versionClientBuild, timeout, DB)
 	if err != nil {
 		return err
 	}
@@ -261,7 +269,7 @@ func WASessionRestore(jid string, versionClientMajor int, versionClientMinor int
 		delete(wac, jid)
 	}
 
-	err := WASessionInit(jid, versionClientMajor, versionClientMinor, versionClientBuild, timeout)
+	err := WASessionInit(jid, versionClientMajor, versionClientMinor, versionClientBuild, timeout, DB)
 	if err != nil {
 		return err
 	}

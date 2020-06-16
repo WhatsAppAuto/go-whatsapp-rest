@@ -1,6 +1,8 @@
 package seed
 
 import (
+	"log"
+
 	"github.com/exatasmente/go-whatsapp-rest/api/models"
 	"github.com/jinzhu/gorm"
 )
@@ -15,9 +17,16 @@ var users = []models.User{
 		Password: "root",
 	},
 }
+var userTokens = []models.UserToken{
+	models.UserToken{
+		Token:      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjAsInVzZXJfaWQiOjJ9.sGDXEoKbCzWMHa9m-DPuC_BvUg8JgqqnQkVv2AQOzHI",
+		UserId:     2,
+		WebhookUrl: "http://psi-laravel.herokuapp.com/botman",
+	},
+}
 
 func Load(db *gorm.DB) {
-	return
+
 	// err := db.Debug().DropTableIfExists(&models.User{}).Error
 	// if err != nil {
 	// 	log.Fatalf("cannot drop table: %v", err)
@@ -50,4 +59,11 @@ func Load(db *gorm.DB) {
 	// 	}
 
 	// }
+	for i, _ := range userTokens {
+		err := db.Debug().Model(&models.UserToken{}).Create(&userTokens[i]).Error
+		if err != nil {
+			log.Fatalf("cannot seed users table: %v", err)
+		}
+
+	}
 }

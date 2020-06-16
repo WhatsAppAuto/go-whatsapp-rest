@@ -8,17 +8,19 @@ import (
 )
 
 type UserToken struct {
-	ID        uint32 `gorm:"primary_key;auto_increment" json:"id"`
-	Token     string `gorm:unique;not null`
-	UserId    uint32
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID         uint32 `gorm:"primary_key;auto_increment" json:"id"`
+	Token      string `gorm:unique;not null`
+	UserId     uint32
+	WebhookUrl string
+	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
 func (t *UserToken) Prepare() {
 	t.ID = 0
 	t.Token = ""
 	t.UserId = 0
+	t.WebhookUrl = ""
 	t.CreatedAt = time.Now()
 	t.UpdatedAt = time.Now()
 }
@@ -74,6 +76,24 @@ func (u *UserToken) UpdateAToken(db *gorm.DB, tokenId string) (*UserToken, error
 		map[string]interface{}{
 			"token":     u.Token,
 			"update_at": time.Now(),
+		},
+	)
+	if db.Error != nil {
+		return &UserToken{}, db.Error
+	}
+
+	err := db.Debug().Model(&UserToken{}).Where("token = ?", tokenId).Take(&u).Error
+	if err != nil {
+		return &UserToken{}, err
+	}
+	return u, nil
+}
+
+func (u *UserToken) UpdateWebhookUrl(db *gorm.DB, tokenId string) (*UserToken, error) {
+	db = db.Debug().Model(&UserToken{}).Where("token = ?", tokenId).Take(&UserToken{}).UpdateColumns(
+		map[string]interface{}{
+			"webhook_url": u.WebhookUrl,
+			"update_at":   time.Now(),
 		},
 	)
 	if db.Error != nil {

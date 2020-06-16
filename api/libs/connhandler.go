@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/Rhymen/go-whatsapp"
 )
@@ -40,22 +41,27 @@ type wpLocationResponse struct {
 	Url       string
 	Context   whatsapp.ContextInfo
 }
-type myHandler struct{}
+type myHandler struct {
+	WebhookUrl string
+}
 
 func (myHandler) HandleError(err error) {
+	if strings.Contains(err.Error(), "error processing data: received invalid data") || strings.Contains(err.Error(), "invalid string with tag 174") {
+		return
+	}
 	fmt.Fprintf(os.Stderr, "%v", err)
 }
-func (myHandler) HandleLiveLocationMessage(message whatsapp.LiveLocationMessage) {
+func (h *myHandler) HandleLiveLocationMessage(message whatsapp.LiveLocationMessage) {
 	if message.Info.FromMe {
-		return ;
-	}else{
+		return
+	} else {
 		data, err := json.Marshal(message)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		fmt.Println(string(data))
-		_, err = http.Post("http://psi-laravel.herokuapp.com/botman", "application/json", bytes.NewBuffer(data))
+		_, err = http.Post(h.WebhookUrl, "application/json", bytes.NewBuffer(data))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -64,10 +70,10 @@ func (myHandler) HandleLiveLocationMessage(message whatsapp.LiveLocationMessage)
 
 }
 
-func (myHandler) HandleLocationMessage(message whatsapp.LocationMessage) {
+func (h *myHandler) HandleLocationMessage(message whatsapp.LocationMessage) {
 	if message.Info.FromMe {
-		return ;
-	}else{
+		return
+	} else {
 		response := wpLocationResponse{
 			Info: wpResponse{
 				Id:          message.Info.Id,
@@ -92,7 +98,7 @@ func (myHandler) HandleLocationMessage(message whatsapp.LocationMessage) {
 			return
 		}
 		fmt.Println(string(data))
-		_, err = http.Post("http://psi-laravel.herokuapp.com/botman", "application/json", bytes.NewBuffer(data))
+		_, err = http.Post(h.WebhookUrl, "application/json", bytes.NewBuffer(data))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -101,17 +107,17 @@ func (myHandler) HandleLocationMessage(message whatsapp.LocationMessage) {
 
 }
 
-func (myHandler) HandleStickerMessage(message whatsapp.StickerMessage) {
+func (h *myHandler) HandleStickerMessage(message whatsapp.StickerMessage) {
 	if message.Info.FromMe == true {
 		return
-	}else{
+	} else {
 		data, err := json.Marshal(message)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		fmt.Println(string(data))
-		// _, err = http.Post("http://psi-laravel.herokuapp.com/botman", "application/json", bytes.NewBuffer(data))
+		// _, err = http.Post(h.WebhookUrl, "application/json", bytes.NewBuffer(data))
 		// if err != nil {
 		// 	fmt.Println(err)
 		// 	return
@@ -120,10 +126,10 @@ func (myHandler) HandleStickerMessage(message whatsapp.StickerMessage) {
 
 }
 
-func (myHandler) HandleTextMessage(message whatsapp.TextMessage) {
+func (h *myHandler) HandleTextMessage(message whatsapp.TextMessage) {
 	if message.Info.FromMe == true {
-		return ;
-	}else{
+		return
+	} else {
 		response := wpTextResponse{
 			Info: wpResponse{
 				Id:          message.Info.Id,
@@ -138,7 +144,8 @@ func (myHandler) HandleTextMessage(message whatsapp.TextMessage) {
 			Context: message.ContextInfo,
 		}
 		data, err := json.Marshal(response)
-		_, err = http.Post("http://psi-laravel.herokuapp.com/botman", "application/json", bytes.NewBuffer(data))
+		fmt.Println(h.WebhookUrl)
+		_, err = http.Post(h.WebhookUrl, "application/json", bytes.NewBuffer(data))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -148,10 +155,10 @@ func (myHandler) HandleTextMessage(message whatsapp.TextMessage) {
 
 }
 
-func (myHandler) HandleImageMessage(message whatsapp.ImageMessage) {
+func (h *myHandler) HandleImageMessage(message whatsapp.ImageMessage) {
 	if message.Info.FromMe == true {
-		return ;
-	}else{
+		return
+	} else {
 		response := wpDataResponse{
 			Info: wpResponse{
 				Id:          message.Info.Id,
@@ -190,7 +197,7 @@ func (myHandler) HandleImageMessage(message whatsapp.ImageMessage) {
 		}
 		fmt.Println(string(data))
 
-		_, err = http.Post("http://psi-laravel.herokuapp.com/botman", "application/json", bytes.NewBuffer(payload))
+		_, err = http.Post(h.WebhookUrl, "application/json", bytes.NewBuffer(payload))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -199,14 +206,14 @@ func (myHandler) HandleImageMessage(message whatsapp.ImageMessage) {
 
 }
 
-func (myHandler) HandleDocumentMessage(message whatsapp.DocumentMessage) {
+func (h *myHandler) HandleDocumentMessage(message whatsapp.DocumentMessage) {
 	//fmt.Println(message.Info)
 }
 
-func (myHandler) HandleVideoMessage(message whatsapp.VideoMessage) {
+func (h *myHandler) HandleVideoMessage(message whatsapp.VideoMessage) {
 	if message.Info.FromMe == true {
-		return ;
-	}else{
+		return
+	} else {
 		response := wpDataResponse{
 			Info: wpResponse{
 				Id:          message.Info.Id,
@@ -246,7 +253,7 @@ func (myHandler) HandleVideoMessage(message whatsapp.VideoMessage) {
 		}
 		fmt.Println(string(data))
 
-		_, err = http.Post("http://psi-laravel.herokuapp.com/botman", "application/json", bytes.NewBuffer(payload))
+		_, err = http.Post(h.WebhookUrl, "application/json", bytes.NewBuffer(payload))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -255,10 +262,10 @@ func (myHandler) HandleVideoMessage(message whatsapp.VideoMessage) {
 
 }
 
-func (myHandler) HandleAudioMessage(message whatsapp.AudioMessage) {
+func (h *myHandler) HandleAudioMessage(message whatsapp.AudioMessage) {
 	if message.Info.FromMe == true {
-		return ;
-	}else{
+		return
+	} else {
 		data, err := message.Download()
 		if err != nil {
 			fmt.Println(err)
@@ -279,10 +286,10 @@ func (myHandler) HandleAudioMessage(message whatsapp.AudioMessage) {
 	}
 }
 
-func (myHandler) HandleJsonMessage(message string) {
+func (h *myHandler) HandleJsonMessage(message string) {
 	fmt.Println(message)
 }
 
-func (myHandler) HandleContactMessage(message whatsapp.ContactMessage) {
+func (h *myHandler) HandleContactMessage(message whatsapp.ContactMessage) {
 	fmt.Println(message)
 }
