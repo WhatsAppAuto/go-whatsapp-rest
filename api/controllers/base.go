@@ -26,7 +26,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 		DBURL = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", DbUser, DbPassword, DbHost, DbPort, DbName)
 		fmt.Printf("%s\n", DbPassword)
 	} else if Dbdriver == "postgres" {
-		DBURL = fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s")
+		DBURL = fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s", DbHost, DbPort, DbUser, DbName, DbPassword)
 	} else {
 		fmt.Printf("Cannot connect to %s database\n", Dbdriver)
 	}
