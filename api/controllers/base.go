@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 
-	_ "github.com/jinzhu/gorm/dialects/postgress" //postgress database driver
+	_ "github.com/jinzhu/gorm/dialects/postgres" //postgress database driver
 
 	"github.com/exatasmente/go-whatsapp-rest/api/models"
 )
@@ -25,7 +25,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 	if Dbdriver == "mysql" {
 		DBURL = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", DbUser, DbPassword, DbHost, DbPort, DbName)
 		fmt.Printf("%s\n", DbPassword)
-	} else if Dbdriver == "postgress" {
+	} else if Dbdriver == "postgres" {
 		DBURL = fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s")
 	} else {
 		fmt.Printf("Cannot connect to %s database\n", Dbdriver)
